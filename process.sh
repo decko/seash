@@ -6,10 +6,10 @@
 
 # Settings
 # Define where SeaSH look for new images to process and a temporary working area.
-WORK_DIR='~/MODIS'
-TMP_WORK_DIR='${WORK_DIR}/.tmp'
-IMG_DIR='${WORK_DIR}/new'
-LOG_DIR='${WORK_DIR}/log'
+WORK_DIR=~/MODIS
+TMP_WORK_DIR=.tmp
+IMG_DIR=new
+LOG_DIR=log
 
 # Coordenates to cut image scene
 SWLON=-77
@@ -23,23 +23,36 @@ cd $WORK_DIR || {
 }
 
 # Verify the directory structure needed for SeaSH.
-if [ ! -d "$TMP_WORK_DIR" ] 
-then 
-	mkdir $TMP_WORK_DIR #Create the Temporary Working Directory
-fi
+mkdir  -p $TMP_WORK_DIR || {
+	echo "Criando $TMP_WORK_DIR." >&2
+}
 
-if [ ! -d "$IMG_DIR" ]
-then
-	mkdir $IMG_DIR #Create the Image Queue Directory
-fi
+mkdir -p $IMG_DIR || {
+	echo "Criando $IMG_DIR" >&2
+}
 
-if [ ! -d "$LOG_DIR" ]
-then 
-	mkdir $LOG_DIR #Create the Log Directory
-fi
+mkdir -p $LOG_DIR || {
+	echo "Criando $LOG_DIR" >&2
+}
+
+#if [ ! -d "$TMP_WORK_DIR" ] 
+#then 
+#	mkdir $TMP_WORK_DIR #Create the Temporary Working Directory
+#fi
+
+#if [ ! -d "$IMG_DIR" ]
+#then
+#	mkdir $IMG_DIR #Create the Image Queue Directory
+#fi
+
+#if [ ! -d "$LOG_DIR" ]
+#then 
+#	mkdir $LOG_DIR #Create the Log Directory
+#fi
 
 for image in $IMG_DIR/*L1A_LAC
 do
+
 # The line below assumes an extension, and creates a base name without that extension
 BASE=`echo $FILE |awk -F. '{ print $1 }'`
 GEOFILE=${BASE}.GEO
